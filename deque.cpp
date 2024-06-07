@@ -23,6 +23,19 @@
 #include <functional>
 
 
+namespace my {
+
+template <typename T>
+class _deque_node {
+public:
+    
+private:
+    T *node;
+    
+};
+
+}
+
 int main() {
 
   return 0;
