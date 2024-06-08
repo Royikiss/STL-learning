@@ -1,14 +1,16 @@
 /*************************************************************************
-        > File Name: deque.cpp
+        > File Name: queue.cpp
       > Author:Royi
       > Mail:royi990001@gmail.com
-      > Created Time: Fri 07 Jun 2024 01:25:31 PM HKT
+      > Created Time: Fri 07 Jun 2024 11:48:58 PM HKT
       > Describe:
  ************************************************************************/
 
+#include <cstdint>
 #include <iostream>
 #include <algorithm>
 #include <list>
+#include <streambuf>
 #include <vector>
 #include <queue>
 #include <stack>
@@ -22,15 +24,16 @@
 #include <sstream>
 #include <functional>
 
-#define _PrintLine_(str) \
-    for (int i = 0; i < 20; ++i) { \
-      std::cout << '='; \
-    } \
-    std::cout << #str; \
-    for (int i = 0; i < 20; ++i) { \
-      std::cout << '='; \
-    } \
-    std::cout << std::endl;
+#define PrintLine(fmt) { \
+  for (int i = 1; i <= 20; ++i) { \
+    std::cout << '='; \
+  } \
+  std::cout << #fmt; \
+  for (int i = 1; i <= 20; ++i) { \
+    std::cout << '='; \
+  } \
+  std::cout << std::endl; \
+}
 
 namespace my {
 
@@ -193,63 +196,72 @@ private:
   _node *_tail;
 };
 
+template <typename T>
+class queue {
+typedef _deque_node<T> _node;
+public:
+  queue() = default;
+  ~queue() = default;
+  
+  void push(T &data) {
+    _deque.push_back(data);
+  }
+  
+  void pop() {
+    _deque.pop_front();
+  }
+  
+  _node &front() {
+    return _deque.front();
+  }
+
+  bool empty() {
+    return _deque.empty();
+  }
+  
+  size_t size() {
+    return _deque.size();
+  }
+  
+  void clear() {
+    _deque.clear();
+  }
+
+private:
+  my::deque<T> _deque;
+};
 }
 
 int main() {
-  my::deque<int> dq;
-
-  _PrintLine_("input");
-
-  std::cout << "dq.init..." << std::endl;
+  my::queue<int> q;
+  PrintLine("push");
   for (int i = 0; i < 10; ++i) {
-    dq.push_back(i);
+    q.push(i);
   }
-  std::cout << "dq.init done." << std::endl;
-
-  _PrintLine_("size");
-  std::cout << "dq.size() = " << dq.size() << std::endl;
-
-  _PrintLine_("pop and front");
-  std::cout << "dq.pop..." << std::endl;
-  for (int i = 0; i < 10; ++i) {
-    std::cout << dq.front() << std::endl;
-    dq.pop_front();
-  }
-  std::cout << "dq.pop done" << std::endl;
-
-
-  _PrintLine_("init again");
-  for (int i = 0; i < 10; ++i) {
-    dq.push_back(i);
-  }
-
-  _PrintLine_("clear and empty");
-  std::cout << "dq.clear() ..." << std::endl;
-  dq.clear();
-  std::cout << "dq.clear() done" << std::endl;
+  PrintLine("size");
+  std::cout << q.size() << std::endl;
   
-  if (dq.empty()) {
-    std::cout << "dq is empty." << std::endl;
+  PrintLine("empty");
+  if (q.empty()) {
+    std::cout << "empty" << std::endl;
   } else {
-    std::cout << "dq isn't empty." << std::endl;
+    std::cout << "not empty" << std::endl;
   }
-
-  std::cout << "init again..." << std::endl;
-  for (int i = 0; i < 10; ++i) {
-    dq.push_back(i);
+  
+  PrintLine("pop");
+  while (!q.empty()) {
+    std::cout << q.front() << std::endl;
+    q.pop();
   }
-
-  if (dq.empty()) {
-    std::cout << "dq is empty." << std::endl;
+  
+  PrintLine("size");
+  std::cout << q.size() << std::endl;
+  
+  PrintLine("empty");
+  if (q.empty()) {
+    std::cout << "empty" << std::endl;
   } else {
-    std::cout << "dq isn't empty." << std::endl;
-  }
-  
-  _PrintLine_("auto text");
-
-  for (auto x : dq) {
-    std::cout << x << std::endl;
-  }
-  
+    std::cout << "not empty" << std::endl;
+  } 
   return 0;
 }
