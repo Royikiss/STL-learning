@@ -2,13 +2,12 @@
         > File Name: sort.cpp
       > Author:Royi
       > Mail:royi990001@gmail.com
-      > Created Time: Tue 18 Jun 2024 04:09:33 PM HKT
+      > Created Time: Tue 18 Jun 2024 07:29:28 PM HKT
       > Describe:
  ************************************************************************/
 
 #include <iostream>
 #include <algorithm>
-#include <list>
 #include <vector>
 #include <queue>
 #include <stack>
@@ -22,41 +21,43 @@
 #include <sstream>
 #include <functional>
 
+#define TEST_BEGINS(x) namespace x {
+#define TEST_ENDS(x) } 
+
 using namespace std;
 
-int *getrandData(int n) {
-    int *arr = new int[n];
-    for (int i = 0; i < n; ++i) {
-        arr[i] = rand() % 100;
-    }
-    return arr;
+TEST_BEGINS(my)
+
+template<typename T, typename Func_T>
+T __median(T first, T medium, T last, Func_T cmp) {
+    if (cmp(medium, first)) std::swap(medium, first);
+    if (cmp(last, medium)) std::swap(medium, last);
+    return medium;
 }
 
-template <typename T> 
-void output(T *begin, T *end) {
-    cout << "arr : ";
-    for (T *p = begin; p < end; ++p) {
-        cout << *p << " ";
-    }
-    cout << endl;
+template<typename iterator>
+void sort(iterator begin, iterator end) {
+    sort(begin, end, std::less<decltype(*(begin))>());
     return ;
 }
 
-namespace my {
-template <typename iterator, typename _Compare>
-void sort(iterator begin, iterator end, function<bool()> cmp) {
-
+template<typename iterator, typename _Compare>
+void sort(iterator begin, iterator end, 
+          _Compare cmp) {
+if (end - begin < 2) return;
+iterator x = begin, y = end - 1;
+typename std::remove_reference<decltype(*begin)>::type z = __median(*x, *(begin + (end - begin) / 2), *y, cmp);
+do {
+    while (cmp(*x, z)) x++;
+    while (cmp(z, *y)) y--;
+    if (x <= y) {
+        std::swap(*x, *y);
+        ++x, --y;
+    }
+} while (x <= y);
+++y;
+my::sort(begin, y, cmp);
+my::sort(x, end, cmp);
 }
-}
 
-int main() {
-    srand(time(0));
-    #define MAX_N 10
-    int *arr1 = getrandData(MAX_N);
-    output(arr1, arr1 + MAX_N);
-    sort(arr1, arr1 + MAX_N);
-    output(arr1, arr1 + MAX_N);
-    
-
-    return 0;
-}
+TEST_ENDS(my)
