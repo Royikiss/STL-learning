@@ -46,12 +46,7 @@ public:
         }
     }
     _shared_ptr_data(const _shared_ptr_data &obj) : ptr(obj.ptr), cnt(obj.cnt) {}
-    ~_shared_ptr_data() {
-        decrease_one();
-        if (*cnt == 0) {
-            delete cnt;
-        }
-    }
+    ~_shared_ptr_data() {}
     void increase_one() const {
         *cnt += 1;
         return ;
@@ -79,6 +74,7 @@ public:
     shared_ptr(const my::shared_ptr<T> &p) : _ptr(p._ptr) {
         this->_ptr.increase_one();
     }
+
     
     shared_ptr<T> &operator=(const shared_ptr<T> &obj) {
         if (_ptr == obj._ptr)  {
